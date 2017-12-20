@@ -1,7 +1,5 @@
 require 'httparty'
 require 'json'
-
-
 # This class represents a world traveller who knows what languages are spoken in each country
 # around the world and can cobble together a sentence in most of them (but not very well)
 class Multilinguist
@@ -27,8 +25,12 @@ class Multilinguist
   def language_in(country_name)
     params = {query: {fullText: 'true'}}
     response = HTTParty.get("#{COUNTRIES_BASE_URL}/#{country_name}", params)
-    json_response = JSON.parse(response.body)
-    json_response.first['languages'].first['iso639_1']
+    unless response.body == ""
+      json_response = JSON.parse(response.body)
+      json_response.first['languages'].first['iso639_1']
+    else
+      return "Error"
+    end
   end
 
   # Sets @current_lang to one of the languages spoken
